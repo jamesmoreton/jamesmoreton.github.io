@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head lang="en">
+    <meta charset="utf-8">
+    <meta name="author" content="James Moreton">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Art</title>
+
+    <style>
+      * { box-sizing: border-box; }
+
+      /* Force scrollbar */
+      html { overflow-y: scroll; }
+
+      body {
+        font-family: 'Roboto', sans-serif;
+        background-color: black;
+      }
+
+      /* Grid */
+
+      .grid {
+        background: black;
+      }
+
+      /* clear fix */
+      .grid:after {
+        content: '';
+        display: block;
+        clear: both;
+      }
+
+      .gutter-sizer {
+        width: 0.5%;
+      }
+
+      /* Grid-Item */
+
+      .grid-sizer,
+      .grid-item {
+        width: 33%;
+        margin-bottom: 8px;
+      }
+
+      .grid-item {
+        float: left;
+      }
+
+      .grid-item--width2 {
+        width: 66%;
+      }
+
+      .grid-item--width3 {
+        width: 100%;
+      }
+
+      .grid-item img {
+        display: block;
+        max-width: 100%;
+      }
+
+      .grid-item:hover {
+        opacity: 0.9;
+      }
+
+      /* The Overlay */
+      .overlay {
+        height: 100%;
+        width: 100%;
+        display: none;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: rgb(0,0,0);
+        background-color: rgba(0,0,0, 0.7);
+      }
+
+      /* Position the content inside the overlay */
+      .overlay-content {
+        position: relative;
+        top: 25%;
+        width: 100%;
+        text-align: center;
+        margin-top: 30px;
+      }
+
+      .overlay a {
+        padding: 8px;
+        text-decoration: none;
+        font-size: 36px;
+        color: #818181;
+        display: block;
+        transition: 0.3s;
+      }
+
+      .overlay p {
+        text-decoration: none;
+        font-size: 20px;
+        color: #f1f1f1;
+        display: block;
+      }
+
+      .overlay a:hover, .overlay a:focus {
+        color: #f1f1f1;
+      }
+
+      /* Position the close button (top right corner) */
+      .overlay .closebtn {
+        position: absolute;
+        top: 20px;
+        right: 45px;
+        font-size: 60px;
+      }
+
+      .date {
+        font-size: 18px;
+        color: #818181;
+      }
+
+      .footer {
+        color: #f1f1f1;
+        text-align: center;
+        width: 100%;
+        position: relative;
+      }
+
+      .footer a:link, a:visited, a:active {
+        color: #f1f1f1;
+        text-decoration: none;
+      }
+
+      .footer a:hover {
+        color: #818181;
+      }
+
+      /* When the height of the screen is less than 450 pixels, change the font-size and position the close button again, so they don't overlap */
+      @media screen and (max-height: 450px) {
+        .grid-item { width: 100%; }
+        .grid-item--width2 { width: 100%; }
+        .grid-item--width3 { width: 100%; }
+        .overlay a { font-size: 20px }
+        .overlay p { font-size: 18px }
+        .date { font-size: 16px }
+        .overlay .closebtn {
+          font-size: 40px;
+          top: 15px;
+          right: 35px;
+        }
+      }
+    </style>
+
+    <!-- Masonry Layout -->
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+    <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  </head>
+
+  <body>
+    <!-- Overlays -->
+    <div id="garden" class="overlay">
+      <a href="javascript:void(0)" class="closebtn" onclick='closeDescription("garden")'>&times;</a>
+      <div class="overlay-content">
+        <p>The Garden of Earthly Delights</p>
+        <p><span class="date">c. 1495-1505</span></p>
+        <p>Hieronymus Bosch</p>
+        <p>Museo del Prado, Madrid</p>
+      </div>
+    </div>
+    <div id="melencolia" class="overlay">
+      <a href="javascript:void(0)" class="closebtn" onclick='closeDescription("melencolia")'>&times;</a>
+      <div class="overlay-content">
+        <p>Melencolia I</p>
+        <p><span class="date">1514</span></p>
+        <p>Albrecht Dürer</p>
+        <p>Metropolitan Museum of Art, New York</p>
+      </div>
+    </div>
+    <div id="orpheus" class="overlay">
+      <a href="javascript:void(0)" class="closebtn" onclick='closeDescription("orpheus")'>&times;</a>
+      <div class="overlay-content">
+        <p>Orpheus</p>
+        <p><span class="date">1628</span></p>
+        <p>Roelandt Savery</p>
+        <p>National Gallery, London</p>
+      </div>
+    </div>
+    <div id="rainbow" class="overlay">
+      <a href="javascript:void(0)" class="closebtn" onclick='closeDescription("rainbow")'>&times;</a>
+      <div class="overlay-content">
+        <p>The Rainbow Landscape</p>
+        <p><span class="date">1636</span></p>
+        <p>Peter Paul Rubens</p>
+        <p>Wallace Collection, London</p>
+      </div>
+    </div>
+    <div id="ursula" class="overlay">
+      <a href="javascript:void(0)" class="closebtn" onclick='closeDescription("ursula")'>&times;</a>
+      <div class="overlay-content">
+        <p>Seaport with the Embarkation of Saint Ursula</p>
+        <p><span class="date">1641</span></p>
+        <p>Claude Lorrain</p>
+        <p>National Gallery, London</p>
+      </div>
+    </div>
+    <div id="sheba" class="overlay">
+      <a href="javascript:void(0)" class="closebtn" onclick='closeDescription("sheba")'>&times;</a>
+      <div class="overlay-content">
+        <p>Seaport with the Embarkation of the Queen of Sheba</p>
+        <p><span class="date">1648</span></p>
+        <p>Claude Lorrain</p>
+        <p>National Gallery, London</p>
+      </div>
+    </div>
+    <div id="flowers" class="overlay">
+      <a href="javascript:void(0)" class="closebtn" onclick='closeDescription("flowers")'>&times;</a>
+      <div class="overlay-content">
+        <p>Flowers on a Fountain with a Peacock</p>
+        <p><span class="date">c. 1700-1710</span></p>
+        <p>Jan Weenix</p>
+        <p>Wallace Collection, London</p>
+      </div>
+    </div>
+    <div id="ascension" class="overlay">
+      <a href="javascript:void(0)" class="closebtn" onclick='closeDescription("ascension")'>&times;</a>
+      <div class="overlay-content">
+        <p>Venice: The Basin of San Marco on Ascension Day</p>
+        <p><span class="date">c. 1740</span></p>
+        <p>Canaletto</p>
+        <p>National Gallery, London</p>
+      </div>
+    </div>
+    <div id="regatta" class="overlay">
+      <a href="javascript:void(0)" class="closebtn" onclick='closeDescription("regatta")'>&times;</a>
+      <div class="overlay-content">
+        <p>A Regatta on the Grand Canal</p>
+        <p><span class="date">c. 1740</span></p>
+        <p>Canaletto</p>
+        <p>National Gallery, London</p>
+      </div>
+    </div>
+    <div id="greenwich" class="overlay">
+      <a href="javascript:void(0)" class="closebtn" onclick='closeDescription("greenwich")'>&times;</a>
+      <div class="overlay-content">
+        <p>Greenwich Hospital from the North Bank of the Thames</p>
+        <p><span class="date">c. 1752</span></p>
+        <p>Canaletto</p>
+        <p>National Gallery, London</p>
+      </div>
+    </div>
+    <div id="swing" class="overlay">
+      <a href="javascript:void(0)" class="closebtn" onclick='closeDescription("swing")'>&times;</a>
+      <div class="overlay-content">
+        <p>The Swing</p>
+        <p><span class="date">c. 1767</span></p>
+        <p>Jean-Honoré Fragonard</p>
+        <p>Wallace Collection, London</p>
+      </div>
+    </div>
+    <div id="goblet" class="overlay">
+      <a href="javascript:void(0)" class="closebtn" onclick='closeDescription("goblet")'>&times;</a>
+      <div class="overlay-content">
+        <p>The Titan’s Goblet</p>
+        <p><span class="date">1833</span></p>
+        <p>Thomas Cole</p>
+        <p>Metropolitan Museum of Art, New York</p>
+      </div>
+    </div>
+    <div id="consummation" class="overlay">
+      <a href="javascript:void(0)" class="closebtn" onclick='closeDescription("consummation")'>&times;</a>
+      <div class="overlay-content">
+        <p>The Course of Empire: The Consummation of Empire</p>
+        <p><span class="date">1835-1836</span></p>
+        <p>Thomas Cole</p>
+        <p>New-York Historical Society, New York</p>
+      </div>
+    </div>
+    <div id="destruction" class="overlay">
+      <a href="javascript:void(0)" class="closebtn" onclick='closeDescription("destruction")'>&times;</a>
+      <div class="overlay-content">
+        <p>The Course of Empire - Destruction</p>
+        <p><span class="date">1836</span></p>
+        <p>Thomas Cole</p>
+        <p>New-York Historical Society, New York</p>
+      </div>
+    </div>
+    <div id="architect" class="overlay">
+      <a href="javascript:void(0)" class="closebtn" onclick='closeDescription("architect")'>&times;</a>
+      <div class="overlay-content">
+        <p>The Architect’s Dream</p>
+        <p><span class="date">1840</span></p>
+        <p>Thomas Cole</p>
+        <p>Toledo Museum of Art, Ohio</p>
+      </div>
+    </div>
+    <div id="hope" class="overlay">
+      <a href="javascript:void(0)" class="closebtn" onclick='closeDescription("hope")'>&times;</a>
+      <div class="overlay-content">
+        <p>Hope</p>
+        <p><span class="date">1886</span></p>
+        <p>George Frederic Watts</p>
+        <p>Tate Britain, London</p>
+      </div>
+    </div>
+    <div id="athens" class="overlay">
+      <a href="javascript:void(0)" class="closebtn" onclick='closeDescription("athens")'>&times;</a>
+      <div class="overlay-content">
+        <p>The School of Athens</p>
+        <p><span class="date">1509-1511</span></p>
+        <p>Raphael</p>
+        <p>Apostolic Palace, Vatican City</p>
+      </div>
+    </div>
+    <div id="promise" class="overlay">
+      <a href="javascript:void(0)" class="closebtn" onclick='closeDescription("promise")'>&times;</a>
+      <div class="overlay-content">
+        <p>The Prologue and the Promise</p>
+        <p><span class="date">1983</span></p>
+        <p>Robert McCall</p>
+        <p>Unknown (previously Epcot, Florida)</p>
+      </div>
+    </div>
+
+    <!-- Grid -->
+    <div class="grid">
+      <div class="grid-sizer"></div>
+      <div class="gutter-sizer"></div>
+      <div class="grid-item" style="cursor:pointer" onclick='openDescription("garden")'><img src="assets/garden.jpg"></div>
+      <div class="grid-item" style="cursor:pointer" onclick='openDescription("melencolia")'><img src="assets/melencolia.jpg"></div>
+      <div class="grid-item" style="cursor:pointer" onclick='openDescription("orpheus")'><img src="assets/orpheus.jpg"></div>
+      <div class="grid-item" style="cursor:pointer" onclick='openDescription("rainbow")'><img src="assets/rainbow.jpg"></div>
+      <div class="grid-item" style="cursor:pointer" onclick='openDescription("ursula")'><img src="assets/ursula.jpg"></div>
+      <div class="grid-item" style="cursor:pointer" onclick='openDescription("sheba")'><img src="assets/sheba.jpg"></div>
+      <div class="grid-item" style="cursor:pointer" onclick='openDescription("flowers")'><img src="assets/flowers.jpg"></div>
+      <div class="grid-item" style="cursor:pointer" onclick='openDescription("ascension")'><img src="assets/ascension.jpg"></div>
+      <div class="grid-item" style="cursor:pointer" onclick='openDescription("regatta")'><img src="assets/regatta.jpg"></div>
+      <div class="grid-item" style="cursor:pointer" onclick='openDescription("greenwich")'><img src="assets/greenwich.jpg"></div>
+      <div class="grid-item" style="cursor:pointer" onclick='openDescription("swing")'><img src="assets/swing.jpg"></div>
+      <div class="grid-item" style="cursor:pointer" onclick='openDescription("goblet")'><img src="assets/goblet.jpg"></div>
+      <div class="grid-item" style="cursor:pointer" onclick='openDescription("consummation")'><img src="assets/consummation.jpg"></div>
+      <div class="grid-item" style="cursor:pointer" onclick='openDescription("destruction")'><img src="assets/destruction.jpg"></div>
+      <div class="grid-item" style="cursor:pointer" onclick='openDescription("architect")'><img src="assets/architect.jpg"></div>
+      <div class="grid-item" style="cursor:pointer" onclick='openDescription("hope")'><img src="assets/hope.jpg"></div>
+      <div class="grid-item grid-item--width2" style="cursor:pointer" onclick='openDescription("athens")'><img src="assets/athens.jpg"></div>
+      <div class="grid-item grid-item--width3" style="cursor:pointer" onclick='openDescription("promise")'><img src="assets/promise.jpg"></div>
+    </div>
+
+    <footer>
+      <p class="footer"><a href="https://jamesmoreton.github.io/" target=”_blank”>jamesmoreton.github.io</a></p>
+    </footer>
+
+    <script>
+      // Init Masonry
+      var grid = document.querySelector('.grid');
+
+      // Configure Masonry
+      var msnry = new Masonry( grid, {
+        itemSelector: '.grid-item',
+        columnWidth: '.grid-sizer',
+        gutter: '.gutter-sizer',
+        percentPosition: true
+      });
+
+      // Avoid item overlaps
+      imagesLoaded( grid ).on( 'progress', function() {
+        // layout Masonry after each image loads
+        msnry.layout();
+      });
+
+      // Open description
+      function openDescription(id) {
+        document.getElementById(id).style.display = "block";
+      }
+
+      // Close description
+      function closeDescription(id) {
+        document.getElementById(id).style.display = "none";
+      }
+    </script>
+  </body>
+</html>
